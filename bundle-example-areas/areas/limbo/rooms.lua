@@ -1,7 +1,6 @@
 return {
   {
     description = "A featureless white room. A pitch black void in the shape of archway can be seen on the east side of the room.",
-    coordinates = { 1, 1, 1 },
     exits       = {
       {
         direction    = "east",
