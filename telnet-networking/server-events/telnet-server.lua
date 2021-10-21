@@ -59,7 +59,7 @@ return {
           end
 
         end);
-        Logger.log("Telnet server started on port: %q...", commander.port);
+        Logger.info("Telnet server started on port: %q...", commander.port);
       end
     end,
 
