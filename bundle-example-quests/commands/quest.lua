@@ -109,7 +109,7 @@ subcommands:add({
   end,
 });
 
-subcommands.add({
+subcommands:add({
   name    = "log",
   command = function(state)
     return function(options, player)
@@ -199,12 +199,19 @@ return {
       if not args or #args < 1 then
         return say(player, "Missing command. See 'help quest'");
       end
+      local argList          = stringx.split(" ")
+      local command, options
+      if #argList == 0 then
+        command = args
+      elseif #argList == 2 then
+        command = argList[1]
+        options = { argList[2] }
+      elseif #argList >= 3 then
+        command = argList[1]
+        options = tablex.icopy({}, argList, 1, 2)
+      end
 
-      args = stringx.split(" ")
-      local command    = args[1]
-      local options    = tablex.icopy({}, args, 1, 2)
-
-      local subcommand = subcommands:find(command);
+      local subcommand       = subcommands:find(command);
       if not subcommand then
         return say(player, "Invalid command. See 'help quest'");
       end
