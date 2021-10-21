@@ -8,7 +8,7 @@ return {
         return B.sayAt(player, "You can't see a map in this room")
       end
       local size   = tonumber(args)
-      size = type(size) == "number" and 4 or size - (size % 2)
+      size = type(size) ~= "number" and 4 or size - (size % 2)
       local xSize  = math.ceil(size * 2)
       xSize = math.max(2, xSize - (xSize % 2))
       if not size or size > 14 then size = 1 end
@@ -18,10 +18,10 @@ return {
         map = map .. "|"
         for x = coords.x - xSize, coords.x + xSize, 1 do
           if x == coords.x and y == coords.y then
-            map = map .. "<yellow>@"
+            map = map .. "<bold><yellow>@<reset>"
           elseif room.area:getRoomAtCoordinates(x, y, coords.z) then
-            local hasUp   = room.area:getRoomAtCoordinates(x, y, coords + 1)
-            local hasDown = room.area:getRoomAtCoordinates(x, y, coords - 1)
+            local hasUp   = room.area:getRoomAtCoordinates(x, y, coords.z + 1)
+            local hasDown = room.area:getRoomAtCoordinates(x, y, coords.z - 1)
             if hasUp and hasDown then
               map = map .. "%%"
             elseif hasUp then
@@ -35,7 +35,7 @@ return {
             map = map .. " "
           end
         end
-        map = map .. "\r\n"
+        map = map .. "|\r\n"
       end
       map = map .. "'" .. string.rep("-", xSize * 2 + 1) .. "'"
       B.sayAt(player, map)
