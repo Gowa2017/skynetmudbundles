@@ -21,7 +21,7 @@ local function sayAtColumns(source, strings, numCols)
 
   col = 1;
   local row             = 1;
-  local said, n         = 1, #strings;
+  local said, n         = 0, #strings;
   while said < n do
     if columnedStrings[col] and columnedStrings[col][row] then
       local string = columnedStrings[col][row];
@@ -29,7 +29,7 @@ local function sayAtColumns(source, strings, numCols)
       Broadcast.at(source, sprintf("%-" .. colWidth .. "s", string));
     end
     col = col + 1;
-    if col == numCols then
+    if col > numCols then
       Broadcast.sayAt(source);
       col = 1;
       row = row + 1;
