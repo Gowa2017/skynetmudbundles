@@ -72,7 +72,7 @@ return {
         local ttr     = sprintf("%.1f",
                                 self.commandQueue:getTimeTilRun(commandIndex));
         B.sayAt(self, sprintf(
-                  "<bold><yellow>Executing <white>%s</white> <yellow>in <white>%q <yellow>seconds.",
+                  "<bold><yellow>Executing <white>%s <yellow>in <white>%q <yellow>seconds.",
                   command.label, ttr));
       end
     end,
@@ -110,8 +110,7 @@ return {
     --
     experience    = function(state)
       return function(self, amount)
-        B.sayAt(self,
-                sprintf("<blue>You gained <bold>%q experience!</blue>", amount));
+        B.sayAt(self, sprintf("<blue>You gained <bold>%q experience!", amount));
 
         local totalTnl = LevelUtil.expToLevel(self.level + 1);
 
