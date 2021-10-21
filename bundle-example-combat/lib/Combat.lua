@@ -12,7 +12,7 @@ local Parser       = wrapper.loadBundleScript("lib/ArgParser",
 ---
 --- This class is an example implementation of a Diku-style real time combat system. Combatants
 --- attack and then have some amount of lag applied to them based on their weapon speed and repeat.
----
+---@class Combat
 local M            = {}
 function M.updateRound(state, attacker)
   if attacker.combatData.killed then
@@ -36,10 +36,11 @@ function M.updateRound(state, attacker)
 
   -- currently just grabs the first combatant from their list but could easily be modified to
   -- implement a threat table and grab the attacker with the highest threat
-  local target, err      = pcall(M.chooseCombatant, attacker)
-  if not target then
+  local ok, target       = pcall(M.chooseCombatant, attacker)
+  if not ok then
     attacker:removeCombatant()
     attacker.combatData = {}
+    error(target)
   end
 
   -- no targets left, remove attacker from combat
@@ -65,7 +66,7 @@ end
 ---@return Character | nil
 function M.chooseCombatant(attacker)
   if tablex.size(attacker.combatData) < 1 then return end
-  for target, _ in ipairs(attacker.combatants) do
+  for target, _ in pairs(attacker.combatants) do
     if not target:hasAttribute("health") then
       error(CombatErrors.CombatInvalidTargetError)
     end
@@ -83,18 +84,19 @@ function M.makeAttack(attacker, target)
   local critical = false;
 
   if attacker:hasAttribute("critical") then
-    local critChance = math.max(attacker.getMaxAttribute("critical") or 0, 0);
+    local critChance = math.max(attacker:getMaxAttribute("critical") or 0, 0);
     critical = math.random(100) < critChance;
     if critical then amount = math.ceil(amount * 1.5) end
   end
 
   local weapon   = attacker.equipment["wield"];
+  ---@type Damage
   local damage   = Damage("health", amount, attacker, weapon or attacker,
                           { critical = critical });
   damage:commit(target);
 
   -- currently lag is really simple, the character's weapon speed = lag
-  attacker.combatData.lag = M.getWeaponSpeed(attacker) * 1000;
+  attacker.combatData.lag = 0 -- M.getWeaponSpeed(attacker) * 1000;
 end
 
 ---
@@ -206,8 +208,9 @@ end
 ---@return number
 function M.normalizeWeaponDamage(attacker, amount)
   local speed = M.getWeaponSpeed(attacker);
-  amount = amount + attacker:hasAttribute("strength") and
-             attacker:getAttribute("strength") or attacker.level;
+  amount = amount +
+             (attacker:hasAttribute("strength") and
+               attacker:getAttribute("strength") or attacker.level);
   return math.floor(amount / 3.5 * speed);
 end
 return M

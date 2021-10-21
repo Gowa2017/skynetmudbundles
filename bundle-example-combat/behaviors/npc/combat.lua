@@ -35,7 +35,7 @@ return function()
       end,
 
       damaged    = function(state)
-        return function(self, config, damage)
+        return function(self, damage, finalAmount)
           if self:getAttribute("health") <= 0 then
             Combat.handleDeath(state, self, damage.attacker);
           end

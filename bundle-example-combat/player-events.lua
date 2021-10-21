@@ -4,6 +4,7 @@ local wrapper      = require("core.lib.wrapper")
 local sfmt         = string.format
 local Logger       = require("core.Logger")
 
+---@type Combat
 local Combat       = wrapper.loadBundleScript("lib/Combat",
                                               "bundle-example-combat");
 local CombatErrors = wrapper.loadBundleScript("lib/CombatErrors",
@@ -31,8 +32,8 @@ local function promptBuilder(promptee)
                         entity:getMaxAttribute("health")) * 100)
   end;
   local formatProgressBar   = function(name, progress, entity)
-    local pad = B.line(nameWidth - name.length, " ");
-    return sfmt("<bold>%s%s: %q <bold>%q/%q", name, pad, progress,
+    local pad = B.line(nameWidth - #name, " ");
+    return sfmt("<bold>%s%s: %s <bold>%q/%q", name, pad, progress,
                 entity:getAttribute("health"), entity:getMaxAttribute("health"));
   end
 
@@ -47,9 +48,8 @@ local function promptBuilder(promptee)
                                      target:getMaxAttribute("health")) * 100);
     local progress    = B.progress(progWidth, currentPerc, "red");
     buf = buf ..
-            sfmt("\r\n%q", formatProgressBar(target.name, progress, target));
+            sfmt("\r\n%s", formatProgressBar(target.name, progress, target));
   end
-
   return buf;
 end
 ---
@@ -62,9 +62,9 @@ return {
         Combat.startRegeneration(state, self);
 
         local hadActions      = false;
-        local ok, e           = pcall(function()
+        local ok, e           = xpcall(function()
           hadActions = Combat.updateRound(state, self)
-        end)
+        end, debug.traceback)
         if not ok then
           if e == CombatErrors.CombatInvalidTargetError then
             B.sayAt(self, "You cant' attack that target")
@@ -78,7 +78,9 @@ return {
         local usingWebsockets = false
         -- don't show the combat prompt to a websockets server
         if not self:hasPrompt("combat" and not usingWebsockets) then
-          self:addPrompt("combat", function() promptBuilder(self) end)
+          self:addPrompt("combat", function()
+            return promptBuilder(self)
+          end)
         end
 
         B.sayAt(self, "");
