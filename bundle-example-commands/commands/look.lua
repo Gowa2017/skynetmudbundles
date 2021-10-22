@@ -10,12 +10,12 @@ local tablex    = require("pl.tablex")
 local stringx   = require("pl.stringx")
 
 local wrapper   = require("core.lib.wrapper")
+local humanize  = wrapper.humanize
 
 local ArgParser =
   wrapper.loadBundleScript("lib/ArgParser", "bundle-example-lib");
 local ItemUtil  = wrapper.loadBundleScript("lib/ItemUtil", "bundle-example-lib");
 
-local function humanize(ms) return ms end
 local function getCombatantsDisplay(entity)
   local combatantsList = { "<red>fighting " }
   for combatant, _ in pairs(entity.combatants) do
