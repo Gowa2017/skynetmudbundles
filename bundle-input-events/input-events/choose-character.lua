@@ -102,11 +102,11 @@ return {
             "<bold>By deleting this account, all the characters will be also deleted.");
           write(
             "<bold>Are you sure you want to delete this account? <cyan>[Y/n] ");
-          socket.once("data", function(confirmation)
+          socket:once("data", function(confirmation)
             say("");
             confirmation = wrapper.trim(confirmation):lower()
             if not confirmation:find("[yn]") then
-              say("<b>Invalid Option");
+              say("<bold>Invalid Option");
               return socket:emit("choose-character", socket, args);
             end
 
@@ -115,7 +115,7 @@ return {
               return socket:emit("choose-character", socket, args);
             end
 
-            say(string.format("Deleting account <b>%q", account.username));
+            say(string.format("Deleting account <bold>%q", account.username));
             account:deleteAccount();
             say("Account deleted, it was a pleasure doing business with you.");
             socket:stop();
