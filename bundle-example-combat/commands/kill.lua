@@ -16,7 +16,7 @@ return {
       if #args < 1 then return B.sayAt(player, "Kill whom?") end
       local ok, target = pcall(Combat.findCombatant, player, args)
       if not ok then
-        Logger.error(res)
+        Logger.error(tostring(res))
         return B.sayAt(player, res)
       end
       if not target then return B.sayAt(player, "They are not here.") end
