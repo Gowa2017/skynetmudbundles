@@ -36,7 +36,7 @@ return {
 
           -- Register all of the input events (login, etc.)
           state.InputEventManager:attach(stream);
-          stream:write("Connecting...");
+          stream:write("Connecting...\r\n");
           Logger.log("User connected...");
           stream:emit("intro", stream);
           stream:resume()
