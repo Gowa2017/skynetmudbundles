@@ -38,7 +38,7 @@ return {
       args.account:addCharacter(args.name);
       args.account:save();
 
-      -- player.setMeta('class', args.playerClass);
+      player:setMeta("class", args.playerClass);
 
       local room               = state.RoomManager:getRoom(startingRoomRef);
       player.room = room;

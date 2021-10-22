@@ -22,8 +22,7 @@ return {
           say("Let's try again...");
           return socket:emit("create-player", socket, args);
         end
-        -- socket:emit('choose-class', socket, args);
-        socket:emit("finish-player", socket, args);
+        socket:emit("choose-class", socket, args);
       end);
     end
   end,
