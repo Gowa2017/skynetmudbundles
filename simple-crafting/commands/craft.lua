@@ -174,7 +174,7 @@ return {
       end
 
       local argList    = stringx.split(args, " ")
-      local command    = #argList < 1 and args
+      local command    = #argList < 1 and args or argList[1]
 
       local subcommand = subcommands:find(command);
       if not subcommand then

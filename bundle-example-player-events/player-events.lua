@@ -127,7 +127,7 @@ return {
             self.experience = 0;
             nextTnl = LevelUtil.expToLevel(self.level + 1);
             B.sayAt(self,
-                    sprintf("<blue>You are now level <bold>%q>!>", self.level));
+                    sprintf("<blue>You are now level <bold>%q!", self.level));
             self.emit("level");
           end
         end
