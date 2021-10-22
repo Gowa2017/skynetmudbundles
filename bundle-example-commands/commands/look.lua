@@ -171,7 +171,7 @@ local function lookRoom(state, player)
       npcLabel = "<green>NPC";
     end
     B.sayAt(player,
-            string.format("%s %s %s", npcLabel, npc.name, combatantsDisplay))
+            string.format("[%s] %s %s", npcLabel, npc.name, combatantsDisplay))
   end
 
   B.at(player, "[<yellow>Exits: ");
